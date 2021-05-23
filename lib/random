@@ -1,0 +1,148 @@
+Column(children: [Padding(
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: Category()),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                child: Text("Product Pics Description:",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                child: TextField(
+                  controller: ProductPictureDescription,
+                  maxLines: 6,
+                  decoration: InputDecoration(
+                    hintText: "Please Insert Description!",
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 1),
+                child: Text(
+                  "Product Pics Name:",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 1),
+                child: TextField(
+                  controller: ProductPictureName,
+                  maxLines: 6,
+                  decoration: InputDecoration(
+                    hintText: "Please Insert Name!",
+                  ),
+                ),
+              ),
+
+              /////////////
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 1),
+                child: Text("Product Pics Price:",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 1),
+                child: TextField(
+                  controller: ProductPicturePrice,
+                  maxLines: 6,
+                  decoration: InputDecoration(
+                    hintText: "Please Insert Price!",
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+                child: Category(),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                child: Text("Image Pics Image:",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                // ignore: deprecated_member_use
+                child: OutlineButton(
+                  onPressed: chooseImage,
+                  child: Text('Choose Image',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ),
+              showImage(),
+              Divider(
+                color: Colors.black,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                child: (WLoading == false)
+                    ? SizedBox(
+                        width: double.infinity,
+                        child: RaisedButton(
+                          color: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          child: Text(
+                            'Complete Image Upload',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          onPressed: () async {
+                            if (ProductPictureDescription.text == "") {
+                              ErrorShowDialog("Please Insert Description!");
+                            } else if (ProductPictureName.text == "") {
+                              ErrorShowDialog("Please Insert Name!");
+                            } else if (ProductPicturePrice.text == "") {
+                              ErrorShowDialog("Please Insert Price!");
+                            } else if (mySelection == mySelection) {
+                              ErrorShowDialog("Please Select a Category!");
+                            } else if (tmpFile == null) {
+                              ErrorShowDialog("Please Insert Image!");
+                            } else {
+                              setState(() {
+                                WLoading = true;
+                              });
+
+                              String fileName = tmpFile.path.split('/').last;
+                              await http.post(Uri.parse(uploadEndPoint), body: {
+                                "product_image": product_image,
+                                "name": fileName,
+                                "category": mySelection,
+                                "product_name": ProductPictureName.text,
+                                "description": ProductPictureDescription.text,
+                                "price": ProductPicturePrice.text,
+                              });
+
+                              setState(() {
+                                WLoading = false;
+                                ProductPictureDescription.text = "";
+                                ProductPictureName.text = "";
+                                ProductPicturePrice.text = "";
+                                file = null;
+                              });
+                            }
+                          },
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CircularProgressIndicator(),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(status),
+                        ],
+                      ),
+              ),],),
