@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kairomarket/Categories/categories.dart';
+import 'FakeLogics.dart';
+import 'package:dio/dio.dart';
 
 class FakeAddProduct extends StatefulWidget {
   @override
@@ -7,16 +10,39 @@ class FakeAddProduct extends StatefulWidget {
 }
 
 class _FakeAddProductState extends State<FakeAddProduct> {
-  TextEditingController ProductNameController = new TextEditingController();
-  TextEditingController ProductDescriptionController =
-      new TextEditingController();
-  TextEditingController ProductPriceController = new TextEditingController();
+  void uploadProduct() async {
+    print("posting data......");
+    var dio = Dio();
+    var formData = FormData.fromMap({
+      'product_name': product_name,
+      'product_image': product_image,
+      'description': description,
+      'price': price,
+      'category': category
+    });
+    var response = await dio.post(
+        'http://142.93.152.229/cairo/api/add_products?token=',
+        data: formData);
+  }
+
+  chooseImage() async {
+    final pickedfile =
+        ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    setState(() {
+      product_image = product_image;
+    });
+    //setStatus('');
+  }
+
+  String product_name = '';
+  String product_image = '';
+  String description = '';
+  int price = 0;
+  String category = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Upload Product"),
-      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,6 +52,22 @@ class _FakeAddProductState extends State<FakeAddProduct> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(0, 50, 0, 20),
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Upload Product",
+                          style: TextStyle(
+                              color: Colors.indigo,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      )),
+                  Divider(
+                    color: Colors.indigo,
+                    thickness: 1,
+                  ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(8, 8, 0, 0),
                     child: Text(
@@ -38,8 +80,13 @@ class _FakeAddProductState extends State<FakeAddProduct> {
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                    child: TextField(
-                        controller: ProductNameController,
+                    child: TextFormField(
+                        onChanged: (_product_name) {
+                          setState(() {
+                            product_name = _product_name;
+                          });
+                        },
+                        initialValue: product_name,
                         decoration:
                             InputDecoration(hintText: "Input Product Name")),
                   )
@@ -63,8 +110,14 @@ class _FakeAddProductState extends State<FakeAddProduct> {
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                    child: TextField(
-                        controller: ProductDescriptionController,
+                    child: TextFormField(
+                        maxLines: 4,
+                        onChanged: (_description) {
+                          setState(() {
+                            description = _description;
+                          });
+                        },
+                        initialValue: description,
                         decoration: InputDecoration(
                             hintText: "Input Product Description")),
                   )
@@ -88,8 +141,13 @@ class _FakeAddProductState extends State<FakeAddProduct> {
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                    child: TextField(
-                        controller: ProductPriceController,
+                    child: TextFormField(
+                        onChanged: (_price) {
+                          setState(() {
+                            price = int.parse(_price);
+                          });
+                        },
+                        initialValue: price.toString(),
                         decoration:
                             InputDecoration(hintText: "Input Product Price")),
                   )
@@ -125,7 +183,9 @@ class _FakeAddProductState extends State<FakeAddProduct> {
                   Padding(
                       padding: EdgeInsets.fromLTRB(8, 8, 0, 0),
                       child: RaisedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            chooseImage();
+                          },
                           color: Colors.indigo,
                           textColor: Colors.white,
                           child: Text("Choose Product Image"))),
@@ -140,7 +200,9 @@ class _FakeAddProductState extends State<FakeAddProduct> {
                   Padding(
                       padding: EdgeInsets.fromLTRB(8, 8, 0, 0),
                       child: RaisedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            uploadProduct();
+                          },
                           color: Colors.indigo,
                           textColor: Colors.white,
                           child: Text("Finish Image Upload"))),

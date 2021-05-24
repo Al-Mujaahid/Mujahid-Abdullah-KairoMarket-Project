@@ -72,14 +72,6 @@ class UserProductsListPage extends StatelessWidget {
             },
           ),
         ),
-        FloatingActionButton(
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => UploadProducts()));
-          },
-          child: Icon(Icons.add_shopping_cart_outlined),
-          tooltip: "Add new product",
-        )
       ]),
     );
   }

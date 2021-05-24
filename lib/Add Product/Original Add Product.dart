@@ -97,7 +97,7 @@ class UploadProductsState extends State<UploadProducts> {
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 4, bottom: 4),
+                    left: 10, right: 10, top: 20, bottom: 4),
                 child: TextField(
                   controller: ProductPictureDescription,
                   decoration: InputDecoration(

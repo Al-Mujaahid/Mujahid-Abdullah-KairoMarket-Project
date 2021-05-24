@@ -3,8 +3,8 @@ import 'package:kairomarket/AllOurProductsPage/DisplayProductsPage/display_produ
 import 'package:kairomarket/AllOurProductsPage/ProductsListPage/products_list_provider.dart';
 import 'package:kairomarket/utils/action_message_page.dart';
 import 'package:provider/provider.dart';
-import 'AllOurProductsPage/UserProductsListPage/user_products_list_page.dart';
-import 'Search/search_home.dart';
+import '../UserProductsListPage/user_products_list_page.dart';
+import '../../Search/search_home.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,6 +17,7 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: Colors.blueGrey,
         appBar: AppBar(
           toolbarHeight: 122,
           bottom: PreferredSize(
@@ -91,31 +92,36 @@ class _HomePageState extends State<HomePage> {
                         ],
                         ...value.productListToDsplay.take(40).map((e) {
                           return Container(
+                              child: SizedBox(
+                            child: Card(
+                              color: Colors.white,
                               child: ListTile(
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                builder: (context) {
-                                  return Container(
-                                    child: DisplayProductPage(products: e),
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) {
+                                      return Container(
+                                        child: DisplayProductPage(products: e),
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
-                            leading: CircleAvatar(
-                              backgroundImage: NetworkImage('${e.image}'),
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage('${e.image}'),
+                                ),
+                                title: Text(
+                                  '${e.product_name}',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text('${e.description}'),
+                                trailing: Text('N' '${e.price}',
+                                    style: TextStyle(
+                                        color: Colors.indigo,
+                                        fontWeight: FontWeight.bold)),
+                                isThreeLine: true,
+                              ),
                             ),
-                            title: Text(
-                              '${e.product_name}',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text('${e.description}'),
-                            trailing: Text('N' '${e.price}',
-                                style: TextStyle(
-                                    color: Colors.indigo,
-                                    fontWeight: FontWeight.bold)),
-                            isThreeLine: true,
                           ));
                           Divider();
                         })

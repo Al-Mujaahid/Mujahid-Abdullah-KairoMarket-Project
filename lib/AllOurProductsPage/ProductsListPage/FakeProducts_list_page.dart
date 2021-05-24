@@ -13,6 +13,7 @@ class ProductsListPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: Colors.blueGrey,
         appBar: AppBar(
           toolbarHeight: 170,
           bottom: PreferredSize(
