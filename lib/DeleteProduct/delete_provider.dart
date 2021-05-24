@@ -18,14 +18,14 @@ class UserDeleteProductsProvider extends BaseProvider {
     var m = 'Loading your products list...';
     try {
       backToLoading(message: m);
-      var userproductResponse = await DeleteProductsActions.deleteUserProduct();
-      print(userproductResponse.runtimeType);
+      //var userproductResponse = await DeleteProductsActions.deleteUserProduct();
+      //print(userproductResponse.runtimeType);
       userproductList.clear();
       userproductList = userproductList;
 
-      userproductList = List.from(userproductResponse['data'])
-          .map((e) => DeleteProducts.fromMap(e))
-          .toList();
+      //userproductList = List.from(userproductResponse['data'])
+      //.map((e) => DeleteProducts.fromMap(e))
+      //.toList();
       userproductList.shuffle();
       userproductList = userproductList;
       setUserProductListToDisplay = userproductList.take(20).toList();
